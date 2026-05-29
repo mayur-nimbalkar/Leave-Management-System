@@ -1,11 +1,10 @@
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Component } from '@angular/core';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [RouterOutlet, MatToolbarModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {
-
-}
+export class Navbar {}
