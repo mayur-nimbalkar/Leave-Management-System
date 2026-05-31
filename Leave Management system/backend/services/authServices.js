@@ -1,4 +1,3 @@
-// backend/services/registerService.js
 import User from "../models/Users.js";
 import bcrypt from "bcryptjs";
 
@@ -11,7 +10,7 @@ const registerService = async (userData) => {
     throw new Error("An account with this email already exists");
   }
 
-  const salt = 10
+  const salt = 10;
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const newUser = await User.create({
@@ -21,7 +20,7 @@ const registerService = async (userData) => {
     email,
     password: hashedPassword,
     role,
-    department, 
+    department,
   });
 
   return {
