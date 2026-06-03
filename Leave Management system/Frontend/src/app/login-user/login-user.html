@@ -1,0 +1,51 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="loginForm">
+      <mat-card-content>
+        <div class="full-width-field">
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <mat-icon matPrefix>email</mat-icon>
+            <input matInput type="email" formControlName="email" placeholder="Enter your email" />
+            @if (
+              loginForm.get('email')?.hasError('required') ||
+              loginForm.get('email')?.hasError('email')
+            ) {
+              <mat-error> Please enter a valid email address </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="full-width-field">
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Enter your password"
+            />
+            <button type="button" mat-icon-button matSuffix (click)="showPassword = !showPassword">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (loginForm.get('password')?.hasError('required')) {
+              <mat-error> Password is required </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="button-container">
+        <button type="submit" (click)="onSubmit()" mat-raised-button color="primary" [disabled]="loginForm.invalid">
+          Login
+        </button>
+        <span
+          ><a aria-current="page" routerLink="../register"> not a user yet register now</a></span
+        >
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

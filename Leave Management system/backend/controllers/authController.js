@@ -1,21 +1,40 @@
-import registerService from "../services/authServices.js";
-
-const registerController = async (req, res) => {
+import { registerService, loginService } from "../services/authServices.js";
+export const registerController = async (req, res) => {
   try {
-    const userData = req.body;
-    const savedUser = await registerService(userData);
-    
+    const newUser = await registerService(req.body);
+
     return res.status(201).json({
       success: true,
-      message: "User registered successfully",
-      data: savedUser,
+      data: newUser,
     });
   } catch (error) {
-    return res.status(400).json({
+    console.error("Controller Error:", error.message);
+    if (error.message === "An account with this email already exists") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something went wrong on the server.",
     });
   }
 };
 
-export default registerController;
+export const loginController = async (req, res) => {
+  try {
+    const loginData = req.body;
+    const result = await loginService(loginData);
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Login Controller Error:", error.message);
+    return res.status(401).json({
+      success: false,
+      message: error.message || "Invalid email or password",
+    });
+  }
+};

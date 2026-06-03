@@ -42,6 +42,11 @@
             ) {
               <mat-error> Email is required and must be a valid email address </mat-error>
             }
+            @if (registerForm.get('email')?.hasError('emailExists')) {
+              <mat-error>
+                This email is already registered with us. Try logging in instead.
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -103,6 +108,8 @@
           Register
         </button>
       </mat-card-actions>
+
+      <span><a aria-current="page" routerLink="../login"> already a member? Login here</a></span>
     </form>
   </mat-card>
 </div>

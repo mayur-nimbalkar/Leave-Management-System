@@ -1,0 +1,18 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 16px;
+}
+
+form,
+.full-width-field,
+mat-form-field {
+  width: 100%;
+}

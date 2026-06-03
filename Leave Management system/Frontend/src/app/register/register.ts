@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AngularMaterials } from '../../shared/AngularMaterial';
 import { AuthService } from '../features/authService';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [...AngularMaterials, ReactiveFormsModule],
+  imports: [...AngularMaterials, ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -51,6 +52,10 @@ export class Register {
       },
       error: (error: any) => {
         console.error('Registration failed:', error);
+        const errorMessage = error.error?.message || 'Registration failed. Please try again.';
+        if (errorMessage.includes('email')) {
+          this.registerForm.get('email')?.setErrors({ emailExists: true });
+        }
       },
     });
   }
