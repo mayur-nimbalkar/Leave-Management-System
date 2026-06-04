@@ -18,6 +18,7 @@ export const registerController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Something went wrong on the server.",
+      error: error.message,
     });
   }
 };

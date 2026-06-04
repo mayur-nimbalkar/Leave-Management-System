@@ -1,6 +1,8 @@
 import User from "../models/Users.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import LeaveBalance from "../models/LeaveBalance.js";
+
 export const registerService = async (userData) => {
   const { first_name, last_name, phone, email, password, role, department } =
     userData;
@@ -21,12 +23,14 @@ export const registerService = async (userData) => {
     role,
     department,
   });
-
+  await LeaveBalance.create({
+    employeeId: newUser._id,
+  });
   const tokenPayload = {
-    userId: user._id,
-    email: user.email,
-    role: user.role,
-    department: user.department,
+    userId: newUser._id,
+    email: newUser.email,
+    role: newUser.role,
+    department: newUser.department,
   };
 
   const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
