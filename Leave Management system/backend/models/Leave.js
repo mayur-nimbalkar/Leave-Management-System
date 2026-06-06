@@ -29,6 +29,16 @@ const leaveSchema = new mongoose.Schema(
       enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
     },
+    approverId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    approvalDate: {
+      type: Date,
+    },
+    rejectionReason: {
+      type: String,
+    },
   },
   {
     timestamps: true,
