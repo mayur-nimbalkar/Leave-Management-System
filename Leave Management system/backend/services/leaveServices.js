@@ -1,5 +1,6 @@
 import Leave from "../models/Leave.js";
 import LeaveBalance from "../models/LeaveBalance.js";
+import { validateLeaveBalance } from "../utils/leaveUtils.js";
 
 export const applyLeaveService = async (leaveData) => {
   const { employeeId, leaveType, startDate, endDate, reason } = leaveData;
@@ -9,20 +10,11 @@ export const applyLeaveService = async (leaveData) => {
   const diffTime = Math.abs(end - start);
   const duration = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-  const balance = await LeaveBalance.findOne({ employeeId });
-  if (!balance) {
-    throw new Error("Leave balance record not found for this staff member.");
-  }
-
-  if (balance[leaveType] < duration) {
-    throw new Error(
-      `Insufficient leave balance. You requested ${duration} days but only have ${balance[leaveType]} left.`,
-    );
-  }
+  await validateLeaveBalance(employeeId, leaveType, duration);
 
   const newLeave = await Leave.create({
     employeeId,
-    leaveType,
+    leaveType,  
     startDate,
     endDate,
     reason,
@@ -46,4 +38,14 @@ export const getLeaveRecordsService = async (leaveId) => {
     .select("leaveType startDate endDate reason status createdAt")
     .limit(100)
     .sort({ createdAt: -1 });
+};
+
+export const updateLeaveStatusService = async (leaveData, newStatus) => {
+  const leave = await Leave.findById(leaveData._id);
+  if (!leave) {
+    throw new Error("Leave application not found.");
+  }
+
+  leave.status = newStatus;
+  return await leave.save();
 };
