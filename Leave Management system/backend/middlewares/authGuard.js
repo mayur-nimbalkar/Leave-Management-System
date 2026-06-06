@@ -22,3 +22,16 @@ export const authGuard = (req, res, next) => {
       .json({ message: "Invalid token, Access denied", error: error.message });
   }
 };
+
+export const roleGuard = (roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res
+        .status(403)
+        .json({
+          message: "Access denied. You dont have the required permissions.",
+        });
+    }
+    next();
+  };
+};
