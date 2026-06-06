@@ -30,3 +30,20 @@ export const applyLeaveService = async (leaveData) => {
   });
   return newLeave;
 };
+
+export const getLeaveRecordsService = async (leaveId) => {
+  let query = {};
+
+  if (leaveId) {
+    const referenceLeave = await Leave.findById(leaveId).select("createdAt");
+
+    if (referenceLeave) {
+      query.createdAt = { $lt: referenceLeave.createdAt };
+    }
+  }
+  return await Leave.find(query)
+    .populate("employeeId", "first_name last_name department")
+    .select("leaveType startDate endDate reason status createdAt")
+    .limit(100)
+    .sort({ createdAt: -1 });
+};
