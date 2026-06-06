@@ -1,4 +1,4 @@
-import { applyLeaveService } from "../services/leaveServices.js";
+import { applyLeaveService, getLeaveRecordsService } from "../services/leaveServices.js";
 
 export const applyLeaveController = async (req, res) => {
   try {
@@ -27,6 +27,24 @@ export const applyLeaveController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error while processing leave application.",
+    });
+  }
+};
+
+export const getLeaveRecordsController = async (req, res) => {
+  try {
+    const { leaveId } = req.params;
+    const leaveRecords = await getLeaveRecordsService(leaveId);
+    return res.status(200).json({
+      success: true,
+      message: "Leave records fetched successfully.",
+      data: leaveRecords,
+    });
+  } catch (error) {
+    console.error("Get Leave Records Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching leave records.",
     });
   }
 };
