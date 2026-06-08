@@ -2,6 +2,7 @@ import express from "express";
 import {
   applyLeaveController,
   getLeaveRecordsController,
+  updateLeaveStatusController,
 } from "../controllers/leaveController.js";
 import { authGuard, roleGuard } from "../middlewares/authGuard.js";
 import Leave from "../models/Leave.js";
@@ -16,4 +17,11 @@ router.get(
   roleGuard(["HOD"]),
   getLeaveRecordsController,
 );
+router.patch(
+  "/update",
+  authGuard,
+  roleGuard(["HOD"]),
+  updateLeaveStatusController,
+);
+
 export default router;

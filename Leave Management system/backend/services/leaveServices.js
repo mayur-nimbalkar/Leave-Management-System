@@ -49,7 +49,7 @@ export const getLeaveRecordsService = async (leaveId) => {
   }
   return await Leave.find(query)
     .populate("employeeId", "first_name last_name department")
-    .select("leaveType startDate endDate reason status createdAt")
+    .select("leaveType duration startDate endDate reason status createdAt")
     .limit(100)
     .sort({ createdAt: -1 });
 };
@@ -81,7 +81,7 @@ export const updateLeaveStatusService = async (leaveData, approverId) => {
   leave.approvalDate = new Date();
   leave.rejectionReason =
     leaveData.status === "Rejected"
-      ? leaveData.rejectionReason.trim().substring(0,200)
+      ? leaveData.rejectionReason.trim().substring(0, 200)
       : undefined;
 
   return await leave.save();
