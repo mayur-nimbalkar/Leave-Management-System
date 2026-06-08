@@ -20,6 +20,10 @@ const leaveSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    duration: {
+      type: Number,
+      required: true,
+    },
     reason: {
       type: String,
       required: true,
