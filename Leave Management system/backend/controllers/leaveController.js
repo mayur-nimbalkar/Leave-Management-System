@@ -1,4 +1,8 @@
-import { applyLeaveService, getLeaveRecordsService } from "../services/leaveServices.js";
+import {
+  applyLeaveService,
+  getLeaveRecordsService,
+  updateLeaveStatusService,
+} from "../services/leaveServices.js";
 
 export const applyLeaveController = async (req, res) => {
   try {
@@ -45,6 +49,25 @@ export const getLeaveRecordsController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error while fetching leave records.",
+    });
+  }
+};
+
+export const updateLeaveStatusController = async (req, res) => {
+  try {
+    const leaveData = req.body;
+    const approverId = req.user.userId;
+    const updatedLeave = await updateLeaveStatusService(leaveData, approverId);
+    return res.status(200).json({
+      success: true,
+      message: "Leave status updated successfully.",
+      data: updatedLeave,
+    });
+  } catch (error) {
+    console.error("Update Leave Status Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while updating leave status.",
     });
   }
 };
