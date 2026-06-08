@@ -54,11 +54,7 @@ export const getLeaveRecordsService = async (leaveId) => {
     .sort({ createdAt: -1 });
 };
 
-export const updateLeaveStatusService = async (
-  leaveData,
-  approverId,
-  newStatus,
-) => {
+export const updateLeaveStatusService = async (leaveData, approverId) => {
   const leave = await Leave.findById(leaveData._id);
   if (!leave) {
     throw new Error("Leave application not found.");
@@ -66,32 +62,27 @@ export const updateLeaveStatusService = async (
   if (leave.status !== "Pending") {
     throw new Error("Only pending leave applications can be updated.");
   }
-  if (!["Approved", "Rejected"].includes(newStatus)) {
+  if (!["Approved", "Rejected"].includes(leaveData.status)) {
     throw new Error(
       "Invalid status update. Status must be either 'Approved' or 'Rejected'.",
     );
   }
-  if (newStatus === "Rejected" && !leaveData.rejectionReason) {
+  if (leaveData.status === "Rejected" && !leaveData.rejectionReason) {
     throw new Error(
       "Rejection reason is required when rejecting a leave application.",
     );
   }
 
-  if (newStatus === "Approved") {
-    const duration =
-      Math.ceil(
-        (new Date(leave.endDate) - new Date(leave.startDate)) /
-          (1000 * 60 * 60 * 24),
-      ) + 1;
-    await deductLeaveBalance(leave.employeeId, leave.leaveType, duration); 
+  if (leaveData.status === "Approved") {
+    await deductLeaveBalance(leave.employeeId, leave.leaveType, leave.duration);
   }
-
-  leave.status = newStatus;
+  leave.status = leaveData.status;
   leave.approverId = approverId;
   leave.approvalDate = new Date();
+  leave.rejectionReason =
+    leaveData.status === "Rejected"
+      ? leaveData.rejectionReason.trim().substring(0,200)
+      : undefined;
 
-  if (leaveData.rejectionReason) {
-    leave.rejectionReason = leaveData.rejectionReason;
-  }
   return await leave.save();
 };
