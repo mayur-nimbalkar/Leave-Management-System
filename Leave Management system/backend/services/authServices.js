@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import LeaveBalance from "../models/LeaveBalance.js";
 
 export const registerService = async (userData) => {
-  const { first_name, last_name, phone, email, password, role, department } =
+  const { firstName, lastName, phone, email, password, role, department } =
     userData;
 
   const userExists = await User.findOne({ email });
@@ -15,8 +15,8 @@ export const registerService = async (userData) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const newUser = await User.create({
-    first_name,
-    last_name,
+    firstName,
+    lastName,
     phone,
     email,
     password: hashedPassword,
@@ -39,12 +39,12 @@ export const registerService = async (userData) => {
 
   return {
     _id: newUser._id,
-    first_name: newUser.first_name,
-    last_name: newUser.last_name,
-    email: newUser.email,
-    role: newUser.role,
-    department: newUser.department,
-    token: token,
+    firstName,
+    lastName,
+    email,
+    role,
+    department,
+    token,
   };
 };
 
@@ -74,8 +74,8 @@ export const loginService = async (loginData) => {
   return {
     user: {
       _id: user._id,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
       department: user.department,
