@@ -57,7 +57,13 @@ export const updateLeaveStatusController = async (req, res) => {
   try {
     const leaveData = req.body;
     const approverId = req.user.userId;
-    const updatedLeave = await updateLeaveStatusService(leaveData, approverId);
+    const approverDept = req.user.department;
+
+    const updatedLeave = await updateLeaveStatusService(
+      leaveData,
+      approverId,
+      approverDept,
+    );
     return res.status(200).json({
       success: true,
       message: "Leave status updated successfully.",

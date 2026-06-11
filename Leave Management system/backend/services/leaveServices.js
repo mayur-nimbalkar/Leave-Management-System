@@ -48,20 +48,28 @@ export const getLeaveRecordsService = async (leaveId) => {
     }
   }
   return await Leave.find(query)
-    .populate("employeeId", "first_name last_name department")
+    .populate("employeeId", "firstName lastName department")
     .select("leaveType duration startDate endDate reason status createdAt")
     .limit(100)
     .sort({ createdAt: -1 });
 };
 
-export const updateLeaveStatusService = async (leaveData, approverId) => {
-  const leave = await Leave.findById(leaveData._id);
+export const updateLeaveStatusService = async (
+  leaveData,
+  approverId,
+  approverDept,
+) => {
+  const leave = await Leave.findById(leaveData._id).populate("employeeId","department").select("leaveType status duration");
   if (!leave) {
     throw new Error("Leave application not found.");
+  }
+  if (approverDept !== leave.employeeId.department) {
+    throw new Error("You can only manage leaves from your department ");
   }
   if (leave.status !== "Pending") {
     throw new Error("Only pending leave applications can be updated.");
   }
+
   if (!["Approved", "Rejected"].includes(leaveData.status)) {
     throw new Error(
       "Invalid status update. Status must be either 'Approved' or 'Rejected'.",
