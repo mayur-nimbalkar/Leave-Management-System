@@ -1,6 +1,7 @@
 import express from "express";
 import {
   applyLeaveController,
+  getAllLeaveRecordsByStatusController,
   getLeaveRecordsController,
   updateLeaveStatusController,
 } from "../controllers/leaveController.js";
@@ -24,4 +25,10 @@ router.patch(
   updateLeaveStatusController,
 );
 
+router.get(
+  "/records/:status/",
+  authGuard,
+  roleGuard(["hod"]),
+  getAllLeaveRecordsByStatusController,
+);
 export default router;

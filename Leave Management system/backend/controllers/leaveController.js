@@ -1,6 +1,7 @@
 import {
   applyLeaveService,
-  getLeaveRecordsService,
+  getAllLeaveRecordsByStatusService,
+  getAllLeaveRecordsService,
   updateLeaveStatusService,
 } from "../services/leaveServices.js";
 
@@ -38,7 +39,7 @@ export const applyLeaveController = async (req, res) => {
 export const getLeaveRecordsController = async (req, res) => {
   try {
     const { leaveId } = req.params;
-    const leaveRecords = await getLeaveRecordsService(leaveId);
+    const leaveRecords = await getAllLeaveRecordsService(leaveId);
     return res.status(200).json({
       success: true,
       message: "Leave records fetched successfully.",
@@ -74,6 +75,28 @@ export const updateLeaveStatusController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error while updating leave status.",
+    });
+  }
+};
+
+export const getAllLeaveRecordsByStatusController = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const { leaveId } = req.query;
+    const leaveRecords = await getAllLeaveRecordsByStatusService(
+      status,
+      leaveId,
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Leave records fetched Successfully",
+      data: leaveRecords,
+    });
+  } catch (error) {
+    console.error("Get Leave Record By Status Error: ", error);
+    return res.status(500).json({
+      success: false,
+      message: "server Error while fetching Data",
     });
   }
 };

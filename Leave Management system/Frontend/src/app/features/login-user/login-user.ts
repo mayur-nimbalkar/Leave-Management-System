@@ -39,12 +39,8 @@ export class LoginUser implements OnInit {
   onSubmit() {
     if (this.loginForm.invalid) return;
 
-    console.log('Logging in with:', this.loginForm.value);
-
     this.authService.loginUser(this.loginForm.value).subscribe({
       next: (response: any) => {
-        console.log('Login successful:', response);
-
         // Save the JWT token or user session data
         localStorage.setItem('token', response.token);
 

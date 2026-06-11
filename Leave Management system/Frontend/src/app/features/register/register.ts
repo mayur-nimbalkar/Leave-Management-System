@@ -43,11 +43,8 @@ export class Register {
       department: formValues.departmentName,
     };
 
-    console.log(userData);
-
     this.authService.registerUser(userData).subscribe({
       next: (response: any) => {
-        console.log('Registration successful:', response);
         this.registerForm.reset({ role: 'staff' });
       },
       error: (error: any) => {
