@@ -30,7 +30,7 @@ export const validateLeaveInputs = (req, res, next) => {
 };
 
 export const hodGuard = (req, res, next) => {
-  if (!req.user || req.user.role !== "HOD") {
+  if (!req.user || req.user.role !== "hod") {
     return res.status(403).json({
       success: false,
       message:

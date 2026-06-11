@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    first_name: {
+    firstName: {
       type: String,
       required: [true, "Please add a first name"],
       trim: true,
     },
-    last_name: {
+    lastName: {
       type: String,
       required: [true, "Please add a last name"],
       trim: true,
@@ -31,8 +31,8 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["HOD", "Staff"],
-      default: "Staff",
+      enum: ["hod", "staff"],
+      default: "staff",
     },
     department: {
       type: String,

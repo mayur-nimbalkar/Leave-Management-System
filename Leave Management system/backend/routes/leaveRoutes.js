@@ -14,13 +14,13 @@ router.post("/apply", authGuard, validateLeaveInputs, applyLeaveController);
 router.get(
   "/records",
   authGuard,
-  roleGuard(["HOD"]),
+  roleGuard(["hod"]),
   getLeaveRecordsController,
 );
 router.patch(
   "/update",
   authGuard,
-  roleGuard(["HOD"]),
+  roleGuard(["hod"]),
   updateLeaveStatusController,
 );
 
