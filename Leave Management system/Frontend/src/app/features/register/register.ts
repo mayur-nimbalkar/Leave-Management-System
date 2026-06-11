@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AngularMaterials } from '../../shared/AngularMaterial';
-import { AuthService } from '../features/authService';
+import { AngularMaterials } from '../../../shared/AngularMaterial';
+import { AuthService } from '../../services/authService';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -17,7 +17,7 @@ export class Register {
 
   ngOnInit() {
     this.registerForm = new FormGroup({
-      role: new FormControl('Staff'),
+      role: new FormControl('staff'),
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -35,8 +35,8 @@ export class Register {
 
     const userData = {
       role: formValues.role,
-      first_name: formValues.firstName,
-      last_name: formValues.lastName,
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
       email: formValues.email,
       phone: formValues.phone,
       password: formValues.password,
@@ -48,7 +48,7 @@ export class Register {
     this.authService.registerUser(userData).subscribe({
       next: (response: any) => {
         console.log('Registration successful:', response);
-        this.registerForm.reset({ role: 'Staff' });
+        this.registerForm.reset({ role: 'staff' });
       },
       error: (error: any) => {
         console.error('Registration failed:', error);

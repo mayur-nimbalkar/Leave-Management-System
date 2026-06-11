@@ -10,8 +10,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AngularMaterials } from '../../shared/AngularMaterial';
-import { AuthService } from '../features/authService';
+import { AngularMaterials } from '../../../shared/AngularMaterial';
+import { AuthService } from '../../services/authService';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
