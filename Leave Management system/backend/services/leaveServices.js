@@ -85,9 +85,11 @@ export const getLeaveRecordsService = async ({
   status,
   leaveId,
   employeeId,
+  department,
+  isHod,
 }) => {
   let query = {};
-
+  query.department = department;
   if (status) {
     query.status = status;
   }

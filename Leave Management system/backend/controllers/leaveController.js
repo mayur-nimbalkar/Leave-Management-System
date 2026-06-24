@@ -68,7 +68,6 @@ export const getLeaveRecordsServiceController = async (req, res) => {
 
     if (loggedInUser.role !== "hod") {
       employeeId = loggedInUser.userId;
-      console.log(req.user);
 
       console.log(employeeId);
     }
@@ -77,7 +76,7 @@ export const getLeaveRecordsServiceController = async (req, res) => {
       status,
       leaveId,
       employeeId,
-      hodDepartment: loggedInUser.department,
+      department: loggedInUser.department,
       isHod: loggedInUser.role === "hod",
     });
 

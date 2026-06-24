@@ -1,1 +1,125 @@
 /* You can add global styles to this file, and also import other style files */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  background: #f5f7fa;
+}
+
+/* Material Overrides */
+.mat-toolbar {
+  font-family: 'Roboto', sans-serif;
+}
+
+.mat-dialog-container {
+  border-radius: 8px !important;
+}
+
+.mat-snack-bar-container {
+  border-radius: 8px !important;
+}
+
+.mat-form-field-label {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #1976d2 !important;
+}
+
+.mat-form-field-underline {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-underline {
+  background-color: #1976d2 !important;
+}
+
+.mat-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mat-raised-button {
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Animation Utilities */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Text Utilities */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #999;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Flexbox Utilities */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
+import employeeRoutes from "./routes/employeeRoutes.js";
 import cors from "cors";
 dotenv.config();
 connectDB();
@@ -12,12 +13,13 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:4200", // Allows only your Angular app to access this API
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use("/api/auth", authRoutes);
 app.use("/api/leaves", leaveRoutes);
+app.use("/api/employees", employeeRoutes);
 
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
