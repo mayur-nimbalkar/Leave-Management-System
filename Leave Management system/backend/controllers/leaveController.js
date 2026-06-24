@@ -1,7 +1,6 @@
 import {
   applyLeaveService,
-  getAllLeaveRecordsByStatusService,
-  getAllLeaveRecordsService,
+  getLeaveRecordsService,
   updateLeaveStatusService,
 } from "../services/leaveServices.js";
 
@@ -36,24 +35,6 @@ export const applyLeaveController = async (req, res) => {
   }
 };
 
-export const getLeaveRecordsController = async (req, res) => {
-  try {
-    const { leaveId } = req.params;
-    const leaveRecords = await getAllLeaveRecordsService(leaveId);
-    return res.status(200).json({
-      success: true,
-      message: "Leave records fetched successfully.",
-      data: leaveRecords,
-    });
-  } catch (error) {
-    console.error("Get Leave Records Error:", error.message);
-    return res.status(500).json({
-      success: false,
-      message: "Server error while fetching leave records.",
-    });
-  }
-};
-
 export const updateLeaveStatusController = async (req, res) => {
   try {
     const leaveData = req.body;
@@ -79,21 +60,34 @@ export const updateLeaveStatusController = async (req, res) => {
   }
 };
 
-export const getAllLeaveRecordsByStatusController = async (req, res) => {
+export const getLeaveRecordsServiceController = async (req, res) => {
   try {
-    const { status } = req.params;
-    const { leaveId } = req.query;
-    const leaveRecords = await getAllLeaveRecordsByStatusService(
+    let { status, leaveId, employeeId } = req.query;
+
+    const loggedInUser = req.user;
+
+    if (loggedInUser.role !== "hod") {
+      employeeId = loggedInUser.userId;
+      console.log(req.user);
+
+      console.log(employeeId);
+    }
+
+    const leaveRecords = await getLeaveRecordsService({
       status,
       leaveId,
-    );
+      employeeId,
+      hodDepartment: loggedInUser.department,
+      isHod: loggedInUser.role === "hod",
+    });
+
     return res.status(200).json({
       success: true,
       message: "Leave records fetched Successfully",
       data: leaveRecords,
     });
   } catch (error) {
-    console.error("Get Leave Record By Status Error: ", error);
+    console.error("Get Leave Record Error: ", error);
     return res.status(500).json({
       success: false,
       message: "server Error while fetching Data",

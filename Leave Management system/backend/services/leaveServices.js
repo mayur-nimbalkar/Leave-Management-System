@@ -38,26 +38,6 @@ export const applyLeaveService = async (leaveData) => {
   return newLeave;
 };
 
-//get all recent leave records
-export const getAllLeaveRecordsService = async (leaveId) => {
-  let query = {};
-
-  if (leaveId) {
-    const referenceLeave = await Leave.findById(leaveId).select("createdAt");
-
-    if (referenceLeave) {
-      query.createdAt = { $lt: referenceLeave.createdAt };
-    }
-  }
-  return await Leave.find(query)
-    .populate("employeeId", "firstName lastName department")
-    .select(
-      "leaveType duration startDate endDate reason status createdAt approverId approvalDate rejectionReason",
-    )
-    .limit(50)
-    .sort({ createdAt: -1 });
-};
-
 export const updateLeaveStatusService = async (
   leaveData,
   approverId,
@@ -101,9 +81,21 @@ export const updateLeaveStatusService = async (
   return await leave.save();
 };
 
-export const getAllLeaveRecordsByStatusService = async (status, leaveId) => {
+export const getLeaveRecordsService = async ({
+  status,
+  leaveId,
+  employeeId,
+}) => {
   let query = {};
-  query.status = status;
+
+  if (status) {
+    query.status = status;
+  }
+
+  if (employeeId) {
+    query.employeeId = employeeId;
+  }
+
   const leaveRecordfields = [
     "leaveType",
     "duration",
@@ -112,30 +104,30 @@ export const getAllLeaveRecordsByStatusService = async (status, leaveId) => {
     "reason",
     "status",
     "createdAt",
+    "employeeId",
   ];
 
-  if (status === "Approved" || status === "Rejected") {
+  if (status === "Approved" || status === "Rejected" || !status) {
     leaveRecordfields.push("approverId", "approvalDate");
   }
-  if (status === "Rejected") {
+
+  if (status === "Rejected" || !status) {
     leaveRecordfields.push("rejectionReason");
   }
-  if (
-    leaveId &&
-    typeof leaveId === "string" &&
-    mongoose.Types.ObjectId.isValid(leaveId)
-  ) {
+
+  if (leaveId && mongoose.Types.ObjectId.isValid(leaveId)) {
     const referenceLeave = await Leave.findById(leaveId).select("updatedAt");
 
     if (referenceLeave) {
       query.updatedAt = { $lt: referenceLeave.updatedAt };
     }
   }
+
   return await Leave.find(query)
     .populate("employeeId", "firstName lastName department")
     .populate("approverId", "firstName lastName")
     .select(leaveRecordfields.join(" "))
     .limit(50)
-    .sort({ createdAt: -1 })
+    .sort({ updatedAt: -1 })
     .lean();
 };

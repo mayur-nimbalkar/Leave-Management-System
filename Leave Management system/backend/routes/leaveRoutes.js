@@ -1,8 +1,7 @@
 import express from "express";
 import {
   applyLeaveController,
-  getAllLeaveRecordsByStatusController,
-  getLeaveRecordsController,
+  getLeaveRecordsServiceController,
   updateLeaveStatusController,
 } from "../controllers/leaveController.js";
 import { authGuard, roleGuard } from "../middlewares/authGuard.js";
@@ -12,12 +11,7 @@ import { validateLeaveInputs } from "../middlewares/leaveMiddleware.js";
 const router = express.Router();
 
 router.post("/apply", authGuard, validateLeaveInputs, applyLeaveController);
-router.get(
-  "/records",
-  authGuard,
-  roleGuard(["hod"]),
-  getLeaveRecordsController,
-);
+
 router.patch(
   "/update",
   authGuard,
@@ -26,9 +20,9 @@ router.patch(
 );
 
 router.get(
-  "/records/:status/",
+  "/records/",
   authGuard,
-  roleGuard(["hod"]),
-  getAllLeaveRecordsByStatusController,
+  roleGuard(["hod", "staff"]),
+  getLeaveRecordsServiceController,
 );
 export default router;
