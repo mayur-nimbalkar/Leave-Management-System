@@ -21,6 +21,15 @@ app.use("/api/auth", authRoutes);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/employees", employeeRoutes);
 
+app.get('/api/health', (_req, res) => {
+  res.status(200).json({ success: true, message: 'Leave management API is live' });
+});
+
+app.use((err, _req, res, _next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, message: 'Unexpected server error' });
+});
+
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

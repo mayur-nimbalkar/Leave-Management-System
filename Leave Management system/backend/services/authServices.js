@@ -38,12 +38,14 @@ export const registerService = async (userData) => {
   });
 
   return {
-    _id: newUser._id,
-    firstName,
-    lastName,
-    email,
-    role,
-    department,
+    user: {
+      _id: newUser._id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      role: newUser.role,
+      department: newUser.department,
+    },
     token,
   };
 };

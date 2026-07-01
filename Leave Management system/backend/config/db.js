@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
+  const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/leave-management";
+
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(mongoUri);
     console.log("Connected to MongoDB");
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-    process.exit(1);
+    console.warn("MongoDB connection failed, continuing without database:", error.message);
   }
 };
 

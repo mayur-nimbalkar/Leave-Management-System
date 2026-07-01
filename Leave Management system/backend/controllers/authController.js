@@ -1,11 +1,12 @@
 import { registerService, loginService } from "../services/authServices.js";
 export const registerController = async (req, res) => {
   try {
-    const newUser = await registerService(req.body);
+    const payload = await registerService(req.body);
 
     return res.status(201).json({
       success: true,
-      data: newUser,
+      token: payload.token,
+      user: payload.user,
     });
   } catch (error) {
     console.error("Controller Error:", error.message);
@@ -29,7 +30,8 @@ export const loginController = async (req, res) => {
     const result = await loginService(loginData);
     return res.status(200).json({
       success: true,
-      data: result,
+      token: result.token,
+      user: result.user,
     });
   } catch (error) {
     console.error("Login Controller Error:", error.message);
