@@ -1,9 +1,76 @@
-<mat-toolbar color="secondary">
-  <span>Leave Management System</span>
-  <!-- <span class="spacer"></span>
-  <a mat-button routerLink="/apply-leave" routerLinkActive="active">Apply Leave</a>
-  <a mat-button routerLink="/leave-status" routerLinkActive="active">Leave Status</a>
-  <a mat-button routerLink="/approvals" routerLinkActive="active">Approvals</a>
-</mat-toolbar> -->
+<mat-toolbar color="primary" class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <span class="app-title" routerLink="/dashboard">
+        <mat-icon class="logo-icon">assignment_ind</mat-icon>
+        Leave Management
+      </span>
+    </div>
+
+    <div class="navbar-center" *ngIf="isAuthenticated">
+      <a mat-button routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>home</mat-icon>
+        Dashboard
+      </a>
+      <a mat-button routerLink="/apply-leave" routerLinkActive="active">
+        <mat-icon>add_circle</mat-icon>
+        Apply Leave
+      </a>
+      <a mat-button routerLink="/my-leaves" routerLinkActive="active">
+        <mat-icon>history</mat-icon>
+        My Leaves
+      </a>
+      <a *ngIf="isHOD()" mat-button routerLink="/approve-leaves" routerLinkActive="active">
+        <mat-icon>done_all</mat-icon>
+        Approvals
+      </a>
+      <a *ngIf="isHOD()" mat-button routerLink="/employees" routerLinkActive="active">
+        <mat-icon>people</mat-icon>
+        Employees
+      </a>
+    </div>
+
+    <div class="navbar-right">
+      <ng-container *ngIf="isAuthenticated && currentUser">
+        <button
+          mat-button
+          [matMenuTriggerFor]="userMenu"
+          class="user-menu-trigger"
+        >
+          <mat-icon>account_circle</mat-icon>
+          <span class="user-name">{{ currentUser.firstName }}</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item disabled>
+            <mat-icon>email</mat-icon>
+            <span>{{ currentUser.email }}</span>
+          </button>
+          <button mat-menu-item disabled>
+            <mat-icon>location_city</mat-icon>
+            <span>{{ currentUser.department | uppercase }}</span>
+          </button>
+          <button mat-menu-item disabled>
+            <mat-icon>badge</mat-icon>
+            <span>{{ currentUser.role | uppercase }}</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+
+      <ng-container *ngIf="!isAuthenticated">
+        <a mat-raised-button routerLink="/login">
+          Login
+        </a>
+        <a mat-stroked-button routerLink="/register">
+          Register
+        </a>
+      </ng-container>
+    </div>
+  </div>
 </mat-toolbar>
-<router-outlet></router-outlet>
+
