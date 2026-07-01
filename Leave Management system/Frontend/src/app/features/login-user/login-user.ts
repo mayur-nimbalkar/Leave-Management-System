@@ -53,12 +53,12 @@ export class LoginUser implements OnInit {
 
     this.isSubmitting = true;
     this.authService.loginUser(this.loginForm.value).subscribe({
-      next: (response: any) => {
+      next: () => {
         this.isSubmitting = false;
         this.snackBar.open('Welcome back!', 'Close', { duration: 2000 });
         setTimeout(() => {
           this.router.navigate(['/dashboard']);
-        }, 1000);
+        }, 600);
       },
       error: (err: any) => {
         this.isSubmitting = false;

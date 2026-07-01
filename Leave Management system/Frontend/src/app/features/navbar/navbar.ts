@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/authService';
-import { AngularMaterials } from '../../../shared/AngularMaterial';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,26 +28,26 @@ export class Navbar implements OnInit {
   currentUser: any = null;
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {
-    this.isAuthenticated = this.authService.isLoggedIn();
-    this.currentUser = this.authService.getCurrentUser();
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {}
+
+  ngOnInit(): void {
+    this.syncAuthState();
+    this.authService.currentUser$.subscribe(() => {
+      this.syncAuthState();
+    });
   }
 
-  ngOnInit() {
-    this.authService.currentUser$.subscribe((user) => {
-      this.currentUser = user;
-    });
+  private syncAuthState(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   logout(): void {
     this.authService.logout();
+    this.syncAuthState();
     this.router.navigate(['/login']);
-  }
-
-  navigateTo(path: string): void {
-    this.router.navigate([path]);
   }
 
   isHOD(): boolean {

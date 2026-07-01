@@ -1,19 +1,20 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { User, AuthResponse, LoginRequest, RegisterRequest } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5500/api/auth';
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
-  public isAuthenticated = signal<boolean>(this.isLoggedIn());
-  public userRole = signal<'hod' | 'staff' | null>(this.getUserRole());
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
+  private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
+  public readonly currentUser$ = this.currentUserSubject.asObservable();
+  public readonly isAuthenticated = signal<boolean>(this.isLoggedIn());
+  public readonly userRole = signal<'hod' | 'staff' | null>(this.getUserRole());
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     this.loadUserFromStorage();
   }
 
