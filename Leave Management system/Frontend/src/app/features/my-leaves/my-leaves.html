@@ -1,0 +1,45 @@
+<section class="my-leaves-page fade-in">
+  <mat-card class="page-card">
+    <div class="card-header">
+      <div>
+        <h2>My Leave History</h2>
+        <p>Track every leave request and its status.</p>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <mat-select [value]="filter" (selectionChange)="applyFilter($event.value)">
+          <mat-option value="all">All</mat-option>
+          <mat-option value="Pending">Pending</mat-option>
+          <mat-option value="Approved">Approved</mat-option>
+          <mat-option value="Rejected">Rejected</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-row">
+      <mat-spinner diameter="36"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && leaves.length === 0" class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <p>No leave requests found.</p>
+    </div>
+
+    <div *ngIf="!isLoading && leaves.length > 0" class="leave-list">
+      <mat-card *ngFor="let leave of leaves" class="leave-item">
+        <div class="leave-main">
+          <div>
+            <h3>{{ leave.leaveType }}</h3>
+            <p>{{ leave.reason }}</p>
+          </div>
+          <div class="status-chip" [ngClass]="leave.status.toLowerCase()">{{ leave.status }}</div>
+        </div>
+        <div class="leave-meta">
+          <span><strong>Duration:</strong> {{ leave.duration }} day(s)</span>
+          <span><strong>Dates:</strong> {{ leave.startDate | date }} to {{ leave.endDate | date }}</span>
+          <span *ngIf="leave.rejectionReason"><strong>Reason:</strong> {{ leave.rejectionReason }}</span>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card>
+</section>

@@ -1,0 +1,70 @@
+.my-leaves-page {
+  padding: 24px;
+}
+
+.page-card {
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.leave-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leave-item {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.leave-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-chip.pending { background: #fff4e5; color: #b76e00; }
+.status-chip.approved { background: #e8f5e9; color: #2e7d32; }
+.status-chip.rejected { background: #ffebee; color: #c62828; }
+
+.leave-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+  color: #666;
+}
+
+.loading-row, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 0;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .card-header, .leave-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
