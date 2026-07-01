@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
-import employeeRoutes from "./routes/employeeRoutes.js";
 import cors from "cors";
 dotenv.config();
 connectDB();
@@ -19,7 +18,6 @@ app.use(
 );
 app.use("/api/auth", authRoutes);
 app.use("/api/leaves", leaveRoutes);
-app.use("/api/employees", employeeRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.status(200).json({ success: true, message: 'Leave management API is live' });
