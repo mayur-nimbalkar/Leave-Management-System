@@ -7,7 +7,7 @@
   <div class="filter-bar">
     <mat-form-field appearance="outline">
       <mat-label>Filter by Status</mat-label>
-      <mat-select [(value)]="statusFilter" (selectionChange)="onFilterChange()">
+      <mat-select [value]="statusFilterSignal()" (selectionChange)="onFilterChange($event.value)">
         <mat-option value="all">All</mat-option>
         <mat-option value="pending">Pending</mat-option>
         <mat-option value="approved">Approved</mat-option>
@@ -20,15 +20,15 @@
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 
-  <div *ngIf="!isLoading && filteredLeaves.length === 0" class="empty-state">
+  <div *ngIf="!isLoading && filteredLeaves().length === 0" class="empty-state">
     <mat-icon>inbox</mat-icon>
     <p>No leave records found</p>
   </div>
 
   <table
-    *ngIf="!isLoading && filteredLeaves.length > 0"
+    *ngIf="!isLoading && filteredLeaves().length > 0"
     mat-table
-    [dataSource]="filteredLeaves"
+    [dataSource]="filteredLeaves()"
     class="full-width-table"
   >
     <ng-container matColumnDef="leaveType">

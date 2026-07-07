@@ -1,4 +1,4 @@
-import { Component, OnInit, DestroyRef, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
@@ -29,13 +29,22 @@ import { LeaveRecord, LeaveService } from '../../services/leaveService';
 export class MyLeaves implements OnInit {
   private leaveService = inject(LeaveService);
   private destroyRef = inject(DestroyRef);
-  private cdr = inject(ChangeDetectorRef);
 
   displayedColumns = ['leaveType', 'dates', 'duration', 'reason', 'status'];
-  leaves: LeaveRecord[] = [];
-  filteredLeaves: LeaveRecord[] = [];
   isLoading = true;
-  statusFilter = 'all';
+
+  leavesSignal = signal<LeaveRecord[]>([]);
+  statusFilterSignal = signal<string>('all');
+
+  filteredLeaves = computed(() => {
+    const leaves = this.leavesSignal();
+    const filter = this.statusFilterSignal().toLowerCase();
+
+    if (filter === 'all') {
+      return leaves;
+    }
+    return leaves.filter((l) => l.status?.toLowerCase() === filter);
+  });
 
   ngOnInit(): void {
     this.loadLeaves();
@@ -49,35 +58,19 @@ export class MyLeaves implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          this.leaves = res.data || [];
-          this.applyFilter();
+          this.leavesSignal.set(res.data || []);
           this.isLoading = false;
-
-          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Failed to load leave records', err);
-          this.leaves = [];
-          this.filteredLeaves = [];
+          this.leavesSignal.set([]);
           this.isLoading = false;
-
-          this.cdr.detectChanges();
         },
       });
   }
 
-  onFilterChange(): void {
-    this.applyFilter();
-    this.cdr.detectChanges();
-  }
-
-  private applyFilter(): void {
-    const filterValue = this.statusFilter.toLowerCase();
-
-    this.filteredLeaves =
-      filterValue === 'all'
-        ? this.leaves
-        : this.leaves.filter((l) => l.status.toLowerCase() === filterValue);
+  onFilterChange(newValue: string): void {
+    this.statusFilterSignal.set(newValue);
   }
 
   formatDate(date: string): string {
