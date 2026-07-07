@@ -1,0 +1,12 @@
+@import '../../shared/page-styles.css';
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.quick-actions a mat-icon {
+  margin-right: 8px;
+}

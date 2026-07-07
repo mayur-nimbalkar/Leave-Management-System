@@ -1,0 +1,28 @@
+@import '../../shared/page-styles.css';
+
+.form-card {
+  max-width: 640px;
+}
+
+.leave-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.date-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .date-row {
+    grid-template-columns: 1fr;
+  }
+}

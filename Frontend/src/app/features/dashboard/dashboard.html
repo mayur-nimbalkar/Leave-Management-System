@@ -1,0 +1,63 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Welcome, {{ user?.firstName }}!</h1>
+    <p>{{ user?.department | uppercase }} Department · {{ user?.role | uppercase }}</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-center">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <div class="card-grid" *ngIf="balance">
+      <mat-card class="stat-card">
+        <mat-icon color="primary">event_available</mat-icon>
+        <h3>Casual Leave</h3>
+        <div class="value">{{ balance.CL }}</div>
+      </mat-card>
+      <mat-card class="stat-card">
+        <mat-icon color="accent">local_hospital</mat-icon>
+        <h3>Sick Leave</h3>
+        <div class="value">{{ balance.SL }}</div>
+      </mat-card>
+      <mat-card class="stat-card">
+        <mat-icon color="primary">beach_access</mat-icon>
+        <h3>Earned Leave</h3>
+        <div class="value">{{ balance.EL }}</div>
+      </mat-card>
+      <mat-card class="stat-card">
+        <mat-icon>swap_horiz</mat-icon>
+        <h3>Comp Off</h3>
+        <div class="value">{{ balance.compOff }}</div>
+      </mat-card>
+    </div>
+
+    <div class="card-grid">
+      <mat-card class="stat-card">
+        <mat-icon class="status-pending">hourglass_empty</mat-icon>
+        <h3>Pending Requests</h3>
+        <div class="value">{{ pendingCount }}</div>
+      </mat-card>
+      <mat-card class="stat-card">
+        <mat-icon class="status-approved">check_circle</mat-icon>
+        <h3>Approved Leaves</h3>
+        <div class="value">{{ approvedCount }}</div>
+      </mat-card>
+    </div>
+
+    <div class="quick-actions">
+      <a mat-raised-button color="primary" routerLink="/apply-leave">
+        <mat-icon>add_circle</mat-icon>
+        Apply for Leave
+      </a>
+      <a mat-stroked-button routerLink="/my-leaves">
+        <mat-icon>history</mat-icon>
+        View My Leaves
+      </a>
+      <a *ngIf="isHOD()" mat-stroked-button routerLink="/approve-leaves">
+        <mat-icon>done_all</mat-icon>
+        Pending Approvals
+      </a>
+    </div>
+  </ng-container>
+</div>
