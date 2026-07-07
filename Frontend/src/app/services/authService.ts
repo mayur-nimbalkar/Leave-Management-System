@@ -11,10 +11,13 @@ export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
   private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
   public readonly currentUser$ = this.currentUserSubject.asObservable();
-  public readonly isAuthenticated = signal<boolean>(this.isLoggedIn());
-  public readonly userRole = signal<'hod' | 'staff' | null>(this.getUserRole());
+
+  // Initialize signals with basic default settings
+  public readonly isAuthenticated = signal<boolean>(false);
+  public readonly userRole = signal<'hod' | 'staff' | null>(null);
 
   constructor(private readonly http: HttpClient) {
+    // This populates the BehaviorSubject AND safely updates your signals on boot up
     this.loadUserFromStorage();
   }
 
@@ -22,13 +25,9 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, userData).pipe(
       tap((response) => {
         if (response.token) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
-          this.isAuthenticated.set(true);
-          this.userRole.set(response.user.role);
+          this.saveSession(response.token, response.user);
         }
-      })
+      }),
     );
   }
 
@@ -36,14 +35,18 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
         if (response.token) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
-          this.isAuthenticated.set(true);
-          this.userRole.set(response.user.role);
+          this.saveSession(response.token, response.user);
         }
-      })
+      }),
     );
+  }
+
+  private saveSession(token: string, user: User): void {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUserSubject.next(user);
+    this.isAuthenticated.set(true);
+    this.userRole.set(user.role);
   }
 
   logout(): void {
@@ -66,11 +69,6 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  getUserRole(): 'hod' | 'staff' | null {
-    const user = this.getCurrentUser();
-    return user?.role || null;
-  }
-
   private loadUserFromStorage(): void {
     const token = localStorage.getItem('token');
     const userJson = localStorage.getItem('user');
@@ -82,6 +80,7 @@ export class AuthService {
         this.userRole.set(user.role);
       } catch (e) {
         console.error('Error loading user from storage:', e);
+        this.logout(); // Wipe corrupt storage data cleanly
       }
     }
   }

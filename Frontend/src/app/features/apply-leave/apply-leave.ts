@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, DestroyRef, inject } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common'; // Imported DatePipe
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AngularMaterials } from '../../../shared/AngularMaterial';
 import { LeaveService } from '../../services/leaveService';
 
@@ -10,24 +11,27 @@ import { LeaveService } from '../../services/leaveService';
   selector: 'app-apply-leave',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ...AngularMaterials, MatSnackBarModule],
+  providers: [DatePipe], // Provided DatePipe for safe formatting
   templateUrl: './apply-leave.html',
   styleUrl: './apply-leave.css',
 })
 export class ApplyLeave implements OnInit {
+  // Using modern inject syntax
+  private leaveService = inject(LeaveService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private datePipe = inject(DatePipe);
+  private destroyRef = inject(DestroyRef);
+
   leaveForm!: FormGroup;
   isSubmitting = false;
+
   leaveTypes = [
     { value: 'CL', label: 'Casual Leave (CL)' },
     { value: 'SL', label: 'Sick Leave (SL)' },
     { value: 'EL', label: 'Earned Leave (EL)' },
     { value: 'CompOff', label: 'Compensatory Off' },
   ];
-
-  constructor(
-    private leaveService: LeaveService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-  ) {}
 
   ngOnInit(): void {
     this.leaveForm = new FormGroup({
@@ -45,6 +49,13 @@ export class ApplyLeave implements OnInit {
     }
 
     const { leaveType, startDate, endDate, reason } = this.leaveForm.value;
+
+    // Quick validation check: Ensure start date isn't after end date
+    if (new Date(startDate) > new Date(endDate)) {
+      this.snackBar.open('Start date cannot be after End date', 'Close', { duration: 3000 });
+      return;
+    }
+
     this.isSubmitting = true;
 
     this.leaveService
@@ -54,6 +65,7 @@ export class ApplyLeave implements OnInit {
         endDate: this.formatDate(endDate),
         reason,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef)) // Protect against slow-network leaks if user leaves page
       .subscribe({
         next: () => {
           this.isSubmitting = false;
@@ -69,7 +81,11 @@ export class ApplyLeave implements OnInit {
       });
   }
 
-  private formatDate(date: Date): string {
-    return new Date(date).toISOString().split('T')[0];
+  /**
+   * Safe date formatting that respects the user's local date selection
+   * rather than forcing a UTC conversion which shifts dates backward.
+   */
+  private formatDate(date: any): string {
+    return this.datePipe.transform(date, 'yyyy-MM-dd') || '';
   }
 }

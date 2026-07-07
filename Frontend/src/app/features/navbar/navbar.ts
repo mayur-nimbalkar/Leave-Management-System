@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/authService';
@@ -23,30 +23,21 @@ import { MatDividerModule } from '@angular/material/divider';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar implements OnInit {
-  isAuthenticated = false;
-  currentUser: any = null;
+export class Navbar {
+  // Expose authService directly to template
+  public authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router,
-  ) {}
-
-  ngOnInit(): void {
-    this.syncAuthState();
-    this.authService.currentUser$.subscribe(() => {
-      this.syncAuthState();
-    });
+  // Computed helper read-only values to make your template cleaner
+  get isAuthenticated() {
+    return this.authService.isAuthenticated();
   }
-
-  private syncAuthState(): void {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    this.currentUser = this.authService.getCurrentUser();
+  get currentUser() {
+    return this.authService.getCurrentUser();
   }
 
   logout(): void {
     this.authService.logout();
-    this.syncAuthState();
     this.router.navigate(['/login']);
   }
 
@@ -54,4 +45,3 @@ export class Navbar implements OnInit {
     return this.authService.userRole() === 'hod';
   }
 }
-

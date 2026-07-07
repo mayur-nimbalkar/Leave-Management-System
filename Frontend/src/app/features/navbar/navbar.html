@@ -9,34 +9,25 @@
 
     <div class="navbar-center" *ngIf="isAuthenticated">
       <a mat-button routerLink="/dashboard" routerLinkActive="active">
-        <mat-icon>home</mat-icon>
-        Dashboard
+        <mat-icon>home</mat-icon> Dashboard
       </a>
       <a mat-button routerLink="/apply-leave" routerLinkActive="active">
-        <mat-icon>add_circle</mat-icon>
-        Apply Leave
+        <mat-icon>add_circle</mat-icon> Apply Leave
       </a>
       <a mat-button routerLink="/my-leaves" routerLinkActive="active">
-        <mat-icon>history</mat-icon>
-        My Leaves
+        <mat-icon>history</mat-icon> My Leaves
       </a>
       <a *ngIf="isHOD()" mat-button routerLink="/approve-leaves" routerLinkActive="active">
-        <mat-icon>done_all</mat-icon>
-        Approvals
+        <mat-icon>done_all</mat-icon> Approvals
       </a>
       <a *ngIf="isHOD()" mat-button routerLink="/employees" routerLinkActive="active">
-        <mat-icon>people</mat-icon>
-        Employees
+        <mat-icon>people</mat-icon> Employees
       </a>
     </div>
 
     <div class="navbar-right">
       <ng-container *ngIf="isAuthenticated && currentUser">
-        <button
-          mat-button
-          [matMenuTriggerFor]="userMenu"
-          class="user-menu-trigger"
-        >
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
           <mat-icon>account_circle</mat-icon>
           <span class="user-name">{{ currentUser.firstName }}</span>
           <mat-icon>arrow_drop_down</mat-icon>
@@ -63,14 +54,9 @@
       </ng-container>
 
       <ng-container *ngIf="!isAuthenticated">
-        <a mat-raised-button routerLink="/login">
-          Login
-        </a>
-        <a mat-stroked-button routerLink="/register">
-          Register
-        </a>
+        <a mat-raised-button routerLink="/login">Login</a>
+        <a mat-stroked-button routerLink="/register">Register</a>
       </ng-container>
     </div>
   </div>
 </mat-toolbar>
-
