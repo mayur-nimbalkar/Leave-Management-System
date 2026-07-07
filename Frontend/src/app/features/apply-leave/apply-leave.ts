@@ -1,5 +1,5 @@
 import { Component, OnInit, DestroyRef, inject } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common'; // Imported DatePipe
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -11,12 +11,11 @@ import { LeaveService } from '../../services/leaveService';
   selector: 'app-apply-leave',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ...AngularMaterials, MatSnackBarModule],
-  providers: [DatePipe], // Provided DatePipe for safe formatting
+  providers: [DatePipe],
   templateUrl: './apply-leave.html',
   styleUrl: './apply-leave.css',
 })
 export class ApplyLeave implements OnInit {
-  // Using modern inject syntax
   private leaveService = inject(LeaveService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
@@ -50,7 +49,6 @@ export class ApplyLeave implements OnInit {
 
     const { leaveType, startDate, endDate, reason } = this.leaveForm.value;
 
-    // Quick validation check: Ensure start date isn't after end date
     if (new Date(startDate) > new Date(endDate)) {
       this.snackBar.open('Start date cannot be after End date', 'Close', { duration: 3000 });
       return;
@@ -65,7 +63,7 @@ export class ApplyLeave implements OnInit {
         endDate: this.formatDate(endDate),
         reason,
       })
-      .pipe(takeUntilDestroyed(this.destroyRef)) // Protect against slow-network leaks if user leaves page
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.isSubmitting = false;
@@ -81,10 +79,6 @@ export class ApplyLeave implements OnInit {
       });
   }
 
-  /**
-   * Safe date formatting that respects the user's local date selection
-   * rather than forcing a UTC conversion which shifts dates backward.
-   */
   private formatDate(date: any): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd') || '';
   }

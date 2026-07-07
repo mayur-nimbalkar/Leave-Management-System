@@ -27,7 +27,6 @@ router.get(
   getLeaveRecordsServiceController,
 );
 
-// New endpoints for balance and statistics
 router.get("/balance", authGuard, async (req, res) => {
   try {
     const balance = await LeaveBalance.findOne({ employeeId: req.user.userId });
@@ -76,7 +75,12 @@ router.get("/statistics", authGuard, async (req, res) => {
       },
     ]);
 
-    const result = stats[0] || { total: 0, pending: 0, approved: 0, rejected: 0 };
+    const result = stats[0] || {
+      total: 0,
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+    };
 
     return res.status(200).json({
       success: true,

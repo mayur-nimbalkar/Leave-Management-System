@@ -12,12 +12,10 @@ export class AuthService {
   private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
   public readonly currentUser$ = this.currentUserSubject.asObservable();
 
-  // Initialize signals with basic default settings
   public readonly isAuthenticated = signal<boolean>(false);
   public readonly userRole = signal<'hod' | 'staff' | null>(null);
 
   constructor(private readonly http: HttpClient) {
-    // This populates the BehaviorSubject AND safely updates your signals on boot up
     this.loadUserFromStorage();
   }
 
@@ -80,7 +78,7 @@ export class AuthService {
         this.userRole.set(user.role);
       } catch (e) {
         console.error('Error loading user from storage:', e);
-        this.logout(); // Wipe corrupt storage data cleanly
+        this.logout();
       }
     }
   }

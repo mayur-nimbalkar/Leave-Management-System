@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/authService';
 import { LeaveRecord, LeaveService } from '../../services/leaveService';
-import { forkJoin } from 'rxjs'; // <-- Imported forkJoin to run APIs in parallel
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,25 +39,19 @@ export class Dashboard implements OnInit {
   }
 
   ngOnInit(): void {
-    // forkJoin waits for BOTH API requests to complete before firing the subscription block
     forkJoin({
       balanceRes: this.leaveService.getLeaveBalance(),
       recordsRes: this.leaveService.getLeaveRecords(),
     }).subscribe({
       next: ({ balanceRes, recordsRes }) => {
-        // 1. Assign Balance Data
         this.balance = balanceRes?.data || null;
 
-        // 2. Process Records Data
         const records = recordsRes?.data || [];
         this.pendingCount = records.filter((r: LeaveRecord) => r.status === 'Pending').length;
         this.approvedCount = records.filter((r: LeaveRecord) => r.status === 'Approved').length;
 
-        // 3. Turn off the loading state since all data is here
         this.isLoading = false;
 
-        // CRITICAL FIX: Explicitly tell Angular to check for changes and repaint the UI.
-        // This stops the dashboard from being stuck on the loader after a login redirect.
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -65,7 +59,6 @@ export class Dashboard implements OnInit {
         this.balance = null;
         this.isLoading = false;
 
-        // Force change detection on error as well, so the spinner disappears if the API fails
         this.cdr.detectChanges();
       },
     });

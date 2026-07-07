@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms'; // Ensure FormsModule is imported if using [(ngModel)] in template
+import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeaveRecord, LeaveService } from '../../services/leaveService';
 
@@ -15,7 +15,7 @@ import { LeaveRecord, LeaveService } from '../../services/leaveService';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule, // Added for template-driven filter bindings if needed
+    FormsModule,
     MatTableModule,
     MatChipsModule,
     MatIconModule,
@@ -53,7 +53,6 @@ export class MyLeaves implements OnInit {
           this.applyFilter();
           this.isLoading = false;
 
-          // Force UI repaint in case of zone updates or loading lags
           this.cdr.detectChanges();
         },
         error: (err) => {
@@ -62,7 +61,6 @@ export class MyLeaves implements OnInit {
           this.filteredLeaves = [];
           this.isLoading = false;
 
-          // Dismiss the loading spinner even if the request fails
           this.cdr.detectChanges();
         },
       });
@@ -70,12 +68,10 @@ export class MyLeaves implements OnInit {
 
   onFilterChange(): void {
     this.applyFilter();
-    // Force table refresh when dropdown changes filter values manually
     this.cdr.detectChanges();
   }
 
   private applyFilter(): void {
-    // Normalizing strings to lowercase prevents subtle casing issues with backend strings
     const filterValue = this.statusFilter.toLowerCase();
 
     this.filteredLeaves =

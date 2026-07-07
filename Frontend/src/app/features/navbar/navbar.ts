@@ -24,11 +24,9 @@ import { MatDividerModule } from '@angular/material/divider';
   styleUrl: './navbar.css',
 })
 export class Navbar {
-  // Expose authService directly to template
   public authService = inject(AuthService);
   private router = inject(Router);
 
-  // Computed helper read-only values to make your template cleaner
   get isAuthenticated() {
     return this.authService.isAuthenticated();
   }

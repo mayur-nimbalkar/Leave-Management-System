@@ -1,13 +1,3 @@
-// import { Component } from '@angular/core';
-// import { AngularMaterials } from '../../shared/AngularMaterial';
-// @Component({
-//   selector: 'app-login-user',
-//   imports: [...AngularMaterials],
-//   templateUrl: './login-user.html',
-//   styleUrl: './login-user.css',
-// })
-// export class  {}
-
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -19,7 +9,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-login-user',
   standalone: true,
-  imports: [CommonModule, ...AngularMaterials, ReactiveFormsModule, RouterModule, MatSnackBarModule],
+  imports: [
+    CommonModule,
+    ...AngularMaterials,
+    ReactiveFormsModule,
+    RouterModule,
+    MatSnackBarModule,
+  ],
   templateUrl: './login-user.html',
   styleUrl: './login-user.css',
 })
