@@ -28,7 +28,7 @@ export const registerService = async (userData) => {
   });
   const tokenPayload = {
     userId: newUser._id,
-    email: newUser.email,
+    // email: newUser.email,
     role: newUser.role,
     department: newUser.department,
   };
@@ -38,12 +38,14 @@ export const registerService = async (userData) => {
   });
 
   return {
-    _id: newUser._id,
-    firstName,
-    lastName,
-    email,
-    role,
-    department,
+    user: {
+      _id: newUser._id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      // email: newUser.email,
+      role: newUser.role,
+      department: newUser.department,
+    },
     token,
   };
 };
@@ -62,7 +64,7 @@ export const loginService = async (loginData) => {
   }
   const tokenPayload = {
     userId: user._id,
-    email: user.email,
+    // email: user.email,
     role: user.role,
     department: user.department,
   };
@@ -76,7 +78,7 @@ export const loginService = async (loginData) => {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
+      // email: user.email,
       role: user.role,
       department: user.department,
     },

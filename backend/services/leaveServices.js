@@ -85,15 +85,26 @@ export const getLeaveRecordsService = async ({
   status,
   leaveId,
   employeeId,
+  department,
+  isHod,
 }) => {
   let query = {};
 
-  if (status) {
-    query.status = status;
-  }
-
   if (employeeId) {
     query.employeeId = employeeId;
+  }
+
+  if (status) {
+    const capitalizedStatus =
+      status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+    query.status = capitalizedStatus;
+  }
+
+  if (leaveId && mongoose.Types.ObjectId.isValid(leaveId)) {
+    const referenceLeave = await Leave.findById(leaveId).select("updatedAt");
+    if (referenceLeave) {
+      query.updatedAt = { $lt: referenceLeave.updatedAt };
+    }
   }
 
   const leaveRecordfields = [
@@ -115,19 +126,20 @@ export const getLeaveRecordsService = async ({
     leaveRecordfields.push("rejectionReason");
   }
 
-  if (leaveId && mongoose.Types.ObjectId.isValid(leaveId)) {
-    const referenceLeave = await Leave.findById(leaveId).select("updatedAt");
-
-    if (referenceLeave) {
-      query.updatedAt = { $lt: referenceLeave.updatedAt };
-    }
-  }
-
-  return await Leave.find(query)
+  let records = await Leave.find(query)
     .populate("employeeId", "firstName lastName department")
     .populate("approverId", "firstName lastName")
     .select(leaveRecordfields.join(" "))
     .limit(50)
     .sort({ updatedAt: -1 })
     .lean();
+
+  if (isHod && department) {
+    records = records.filter(
+      (record) =>
+        record.employeeId && record.employeeId.department === department,
+    );
+  }
+
+  return records;
 };
