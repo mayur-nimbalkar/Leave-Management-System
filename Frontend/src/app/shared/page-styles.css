@@ -1,0 +1,102 @@
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 500;
+  color: #333;
+}
+
+.page-header p {
+  margin: 0;
+  color: #666;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  padding: 20px;
+}
+
+.stat-card mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+}
+
+.stat-card h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.stat-card .value {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.status-pending {
+  color: #f57c00;
+  font-weight: 500;
+}
+
+.status-approved {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.status-rejected {
+  color: #c62828;
+  font-weight: 500;
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  color: #666;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
+}
