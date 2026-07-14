@@ -33,9 +33,13 @@ export const registerService = async (userData) => {
     department: newUser.department,
   };
 
-  const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    tokenPayload,
+    process.env.JWT_SECRET || "leave-management-secret",
+    {
+      expiresIn: "1d",
+    },
+  );
 
   return {
     user: {
@@ -69,9 +73,13 @@ export const loginService = async (loginData) => {
     department: user.department,
   };
 
-  const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    tokenPayload,
+    process.env.JWT_SECRET || "leave-management-secret",
+    {
+      expiresIn: "1d",
+    },
+  );
 
   return {
     user: {
