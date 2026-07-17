@@ -2,6 +2,7 @@ import express from "express";
 import {
   applyLeaveController,
   getLeaveRecordsServiceController,
+  getStats,
   updateLeaveStatusController,
 } from "../controllers/leaveController.js";
 import { authGuard, roleGuard } from "../middlewares/authGuard.js";
@@ -53,3 +54,6 @@ router.get("/balance", authGuard, async (req, res) => {
     });
   }
 });
+
+router.get("/statistics", authGuard, getStats);
+export default router;
