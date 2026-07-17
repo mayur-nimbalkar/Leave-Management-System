@@ -91,3 +91,21 @@ export const getLeaveRecordsServiceController = async (req, res) => {
     });
   }
 };
+
+export const getStats = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const result = await getLeaveStatistics(userId);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error fetching statistics:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching statistics",
+    });
+  }
+};
