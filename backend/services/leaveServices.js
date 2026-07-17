@@ -143,3 +143,33 @@ export const getLeaveRecordsService = async ({
 
   return records;
 };
+
+export const getLeaveStatistics = async (userId) => {
+  const stats = await Leave.aggregate([
+    { $match: { employeeId: userId } },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: 1 },
+        pending: {
+          $sum: { $cond: [{ $eq: ["$status", "Pending"] }, 1, 0] },
+        },
+        approved: {
+          $sum: { $cond: [{ $eq: ["$status", "Approved"] }, 1, 0] },
+        },
+        rejected: {
+          $sum: { $cond: [{ $eq: ["$status", "Rejected"] }, 1, 0] },
+        },
+      },
+    },
+  ]);
+
+  return (
+    stats[0] || {
+      total: 0,
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+    }
+  );
+};
