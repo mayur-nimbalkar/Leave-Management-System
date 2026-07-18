@@ -23,7 +23,11 @@
       <!-- Password -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Password</mat-label>
-        <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" />
+        <input
+          matInput
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+        />
         <button
           type="button"
           mat-icon-button
@@ -61,4 +65,11 @@
       </div>
     </form>
   </div>
+
+  <!-- Demo Credentials Info -->
+  <div class="demo-info">
+    <p>Demo Credentials Available</p>
+    <small>Use test credentials to explore the application</small>
+  </div>
 </div>
+
