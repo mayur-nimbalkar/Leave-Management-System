@@ -20,6 +20,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/my-leaves/my-leaves').then((m) => m.MyLeaves),
   },
+  {
+    path: 'apply-leave',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/apply-leave/apply-leave').then((m) => m.ApplyLeave),
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: 'dashboard' },
 ];
