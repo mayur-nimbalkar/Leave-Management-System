@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { hodGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,12 @@ export const routes: Routes = [
     path: 'apply-leave',
     canActivate: [authGuard],
     loadComponent: () => import('./features/apply-leave/apply-leave').then((m) => m.ApplyLeave),
+  },
+  {
+    path: 'approve-leaves',
+    canActivate: [authGuard, hodGuard],
+    loadComponent: () =>
+      import('./features/approve-leaves/approve-leaves').then((m) => m.ApproveLeaves),
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: 'dashboard' },
